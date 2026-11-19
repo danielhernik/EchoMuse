@@ -156,6 +156,9 @@ func main() {
 	// by the data client on the mono mic stream. Starts disabled; armed by
 	// applyAecConfig from env defaults below and on every config push.
 	canceller := aec.New(board.CurrentLayout().Mics.NumMics())
+	// Before the speaker exists: its write loop feeds the de-aliasing ring
+	// from the first period, on the side the loopback carries (#273).
+	canceller.SetRefSide(board.CurrentLayout().Mics.EchoRefSide)
 
 	// The level tap drives the energy-reactive LED ring ("meter" pattern).
 	// The Server doesn't exist yet when the speaker starts its pump loop,
